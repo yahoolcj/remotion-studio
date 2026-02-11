@@ -1,0 +1,387 @@
+[
+  {
+    "text": "你好，",
+    "startMs": 300,
+    "endMs": 800,
+    "timestampMs": 300,
+    "confidence": 1
+  },
+  {
+    "text": "今天我们来聊一聊",
+    "startMs": 800,
+    "endMs": 1800,
+    "timestampMs": 800,
+    "confidence": 1
+  },
+  {
+    "text": "SemVer，",
+    "startMs": 1800,
+    "endMs": 2600,
+    "timestampMs": 1800,
+    "confidence": 1
+  },
+  {
+    "text": "也就是",
+    "startMs": 2600,
+    "endMs": 3000,
+    "timestampMs": 2600,
+    "confidence": 1
+  },
+  {
+    "text": "语义化版本号规范。",
+    "startMs": 3000,
+    "endMs": 4200,
+    "timestampMs": 3000,
+    "confidence": 1
+  },
+
+  {
+    "text": "一个标准的版本号",
+    "startMs": 4400,
+    "endMs": 5400,
+    "timestampMs": 4400,
+    "confidence": 1
+  },
+  {
+    "text": "由三部分组成，",
+    "startMs": 5400,
+    "endMs": 6200,
+    "timestampMs": 5400,
+    "confidence": 1
+  },
+  {
+    "text": "分别是",
+    "startMs": 6200,
+    "endMs": 6700,
+    "timestampMs": 6200,
+    "confidence": 1
+  },
+  {
+    "text": "主版本号、",
+    "startMs": 6700,
+    "endMs": 7300,
+    "timestampMs": 6700,
+    "confidence": 1
+  },
+  {
+    "text": "次版本号",
+    "startMs": 7300,
+    "endMs": 7900,
+    "timestampMs": 7300,
+    "confidence": 1
+  },
+  {
+    "text": "和修订号，",
+    "startMs": 7900,
+    "endMs": 8500,
+    "timestampMs": 7900,
+    "confidence": 1
+  },
+  {
+    "text": "用点号分隔。",
+    "startMs": 8500,
+    "endMs": 9200,
+    "timestampMs": 8500,
+    "confidence": 1
+  },
+  {
+    "text": "格式就是",
+    "startMs": 9400,
+    "endMs": 10000,
+    "timestampMs": 9400,
+    "confidence": 1
+  },
+  {
+    "text": "MAJOR 点 MINOR 点 PATCH。",
+    "startMs": 10000,
+    "endMs": 11300,
+    "timestampMs": 10000,
+    "confidence": 1
+  },
+
+  {
+    "text": "首先是主版本号。",
+    "startMs": 11700,
+    "endMs": 12800,
+    "timestampMs": 11700,
+    "confidence": 1
+  },
+  {
+    "text": "当你做了",
+    "startMs": 12800,
+    "endMs": 13300,
+    "timestampMs": 12800,
+    "confidence": 1
+  },
+  {
+    "text": "不兼容的 API 变更时，",
+    "startMs": 13300,
+    "endMs": 14600,
+    "timestampMs": 13300,
+    "confidence": 1
+  },
+  {
+    "text": "就需要递增主版本号。",
+    "startMs": 14600,
+    "endMs": 15800,
+    "timestampMs": 14600,
+    "confidence": 1
+  },
+  {
+    "text": "比如 React 从 17 升到 18，",
+    "startMs": 15800,
+    "endMs": 17200,
+    "timestampMs": 15800,
+    "confidence": 1
+  },
+  {
+    "text": "引入了并发渲染，",
+    "startMs": 17200,
+    "endMs": 18200,
+    "timestampMs": 17200,
+    "confidence": 1
+  },
+  {
+    "text": "这就是一个 Breaking Change。",
+    "startMs": 18200,
+    "endMs": 19600,
+    "timestampMs": 18200,
+    "confidence": 1
+  },
+
+  {
+    "text": "然后是次版本号。",
+    "startMs": 19800,
+    "endMs": 20800,
+    "timestampMs": 19800,
+    "confidence": 1
+  },
+  {
+    "text": "当你新增了功能，",
+    "startMs": 20800,
+    "endMs": 21800,
+    "timestampMs": 20800,
+    "confidence": 1
+  },
+  {
+    "text": "但保持向后兼容时，",
+    "startMs": 21800,
+    "endMs": 22800,
+    "timestampMs": 21800,
+    "confidence": 1
+  },
+  {
+    "text": "就递增次版本号。",
+    "startMs": 22800,
+    "endMs": 23800,
+    "timestampMs": 22800,
+    "confidence": 1
+  },
+  {
+    "text": "比如从 1.3.0 升到 1.4.0，",
+    "startMs": 23800,
+    "endMs": 25200,
+    "timestampMs": 23800,
+    "confidence": 1
+  },
+  {
+    "text": "旧代码完全不受影响。",
+    "startMs": 25200,
+    "endMs": 26400,
+    "timestampMs": 25200,
+    "confidence": 1
+  },
+
+  {
+    "text": "最后是修订号。",
+    "startMs": 26600,
+    "endMs": 27600,
+    "timestampMs": 26600,
+    "confidence": 1
+  },
+  {
+    "text": "修订号专门用来修复 Bug，",
+    "startMs": 27600,
+    "endMs": 29000,
+    "timestampMs": 27600,
+    "confidence": 1
+  },
+  {
+    "text": "不会添加任何新功能，",
+    "startMs": 29000,
+    "endMs": 30200,
+    "timestampMs": 29000,
+    "confidence": 1
+  },
+  {
+    "text": "你可以安全地升级。",
+    "startMs": 30200,
+    "endMs": 31400,
+    "timestampMs": 30200,
+    "confidence": 1
+  },
+
+  {
+    "text": "除了这三个数字，",
+    "startMs": 31800,
+    "endMs": 32800,
+    "timestampMs": 31800,
+    "confidence": 1
+  },
+  {
+    "text": "还可以添加扩展标识符。",
+    "startMs": 32800,
+    "endMs": 34000,
+    "timestampMs": 32800,
+    "confidence": 1
+  },
+  {
+    "text": "通过连字符",
+    "startMs": 34200,
+    "endMs": 34900,
+    "timestampMs": 34200,
+    "confidence": 1
+  },
+  {
+    "text": "可以标记预发布版本，",
+    "startMs": 34900,
+    "endMs": 36000,
+    "timestampMs": 34900,
+    "confidence": 1
+  },
+  {
+    "text": "比如 alpha、beta、rc，",
+    "startMs": 36000,
+    "endMs": 37400,
+    "timestampMs": 36000,
+    "confidence": 1
+  },
+  {
+    "text": "表示这个版本还不够稳定。",
+    "startMs": 37400,
+    "endMs": 38800,
+    "timestampMs": 37400,
+    "confidence": 1
+  },
+  {
+    "text": "通过加号",
+    "startMs": 39000,
+    "endMs": 39600,
+    "timestampMs": 39000,
+    "confidence": 1
+  },
+  {
+    "text": "可以附加构建元数据，",
+    "startMs": 39600,
+    "endMs": 40800,
+    "timestampMs": 39600,
+    "confidence": 1
+  },
+  {
+    "text": "但它不影响版本比较。",
+    "startMs": 40800,
+    "endMs": 42000,
+    "timestampMs": 40800,
+    "confidence": 1
+  },
+
+  {
+    "text": "说到版本比较，",
+    "startMs": 42400,
+    "endMs": 43400,
+    "timestampMs": 42400,
+    "confidence": 1
+  },
+  {
+    "text": "规则也很简单。",
+    "startMs": 43400,
+    "endMs": 44200,
+    "timestampMs": 43400,
+    "confidence": 1
+  },
+  {
+    "text": "先比主版本号，",
+    "startMs": 44400,
+    "endMs": 45200,
+    "timestampMs": 44400,
+    "confidence": 1
+  },
+  {
+    "text": "再比次版本号，",
+    "startMs": 45200,
+    "endMs": 46000,
+    "timestampMs": 45200,
+    "confidence": 1
+  },
+  {
+    "text": "最后比修订号。",
+    "startMs": 46000,
+    "endMs": 46800,
+    "timestampMs": 46000,
+    "confidence": 1
+  },
+  {
+    "text": "预发布版本",
+    "startMs": 47000,
+    "endMs": 47600,
+    "timestampMs": 47000,
+    "confidence": 1
+  },
+  {
+    "text": "总是低于同号的正式版。",
+    "startMs": 47600,
+    "endMs": 49000,
+    "timestampMs": 47600,
+    "confidence": 1
+  },
+
+  {
+    "text": "最后总结一下。",
+    "startMs": 49400,
+    "endMs": 50400,
+    "timestampMs": 49400,
+    "confidence": 1
+  },
+  {
+    "text": "主版本号代表破坏性变更，",
+    "startMs": 50400,
+    "endMs": 51800,
+    "timestampMs": 50400,
+    "confidence": 1
+  },
+  {
+    "text": "次版本号代表新增功能，",
+    "startMs": 51800,
+    "endMs": 53000,
+    "timestampMs": 51800,
+    "confidence": 1
+  },
+  {
+    "text": "修订号代表 Bug 修复。",
+    "startMs": 53000,
+    "endMs": 54200,
+    "timestampMs": 53000,
+    "confidence": 1
+  },
+  {
+    "text": "掌握了 SemVer，",
+    "startMs": 54500,
+    "endMs": 55400,
+    "timestampMs": 54500,
+    "confidence": 1
+  },
+  {
+    "text": "你就能更好地理解",
+    "startMs": 55400,
+    "endMs": 56400,
+    "timestampMs": 55400,
+    "confidence": 1
+  },
+  {
+    "text": "依赖管理和版本升级。",
+    "startMs": 56400,
+    "endMs": 57800,
+    "timestampMs": 56400,
+    "confidence": 1
+  }
+]
