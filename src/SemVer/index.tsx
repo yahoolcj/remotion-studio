@@ -1,129 +1,200 @@
-import { AbsoluteFill, staticFile } from "remotion";
-import { Audio } from "@remotion/media";
+import { AbsoluteFill } from "remotion";
 import { TransitionSeries, linearTiming } from "@remotion/transitions";
 import { fade } from "@remotion/transitions/fade";
 import { slide } from "@remotion/transitions/slide";
-import { TitleScene } from "./TitleScene";
+import { Intro } from "../shared/Intro";
+import { Outro } from "../shared/Outro";
+import { Captions, type CaptionSegment } from "../shared/Captions";
 import { StructureScene } from "./StructureScene";
 import { MajorScene } from "./MajorScene";
 import { MinorScene } from "./MinorScene";
 import { PatchScene } from "./PatchScene";
 import { PreReleaseScene } from "./PreReleaseScene";
 import { ComparisonScene } from "./ComparisonScene";
-import { SummaryScene } from "./SummaryScene";
+import { RealWorldScene } from "./RealWorldScene";
+import {
+  introCaptions,
+  structureCaptions,
+  majorCaptions,
+  minorCaptions,
+  patchCaptions,
+  preReleaseCaptions,
+  comparisonCaptions,
+  realWorldCaptions,
+  outroCaptions,
+} from "./captions";
 
-
-// 每个场景的帧数 (fps=30)
+// ========== 场景时长（fps=30）==========
+// 按正常语速拉长，确保字幕完整朗读 + 留出呼吸间隔
 const SCENE_DURATIONS = {
-  title: 120,        // 4 秒
-  structure: 150,    // 5 秒
-  major: 135,        // 4.5 秒
-  minor: 135,        // 4.5 秒
-  patch: 135,        // 4.5 秒
-  preRelease: 150,   // 5 秒
-  comparison: 150,   // 5 秒
-  summary: 150,      // 5 秒
+  intro: 180,        //  6 秒  — 通用开场
+  structure: 270,    //  9 秒
+  major: 300,        // 10 秒
+  minor: 270,        //  9 秒
+  patch: 270,        //  9 秒
+  preRelease: 330,   // 11 秒
+  comparison: 330,   // 11 秒
+  realWorld: 630,    // 21 秒  — 实际应用（两页）
+  outro: 210,        //  7 秒  — 通用结尾
 };
 
-const TRANSITION_DURATION = 20; // 转场帧数
+const T = 20; // 转场帧数
 
+const SUMMARY_POINTS = [
+  "MAJOR — 不兼容的 API 变更",
+  "MINOR — 向后兼容的新功能",
+  "PATCH — 向后兼容的 Bug 修复",
+  "预发布标识不保证稳定性",
+  "构建元数据不影响版本比较",
+];
+
+// ========== 计算全局字幕时间轴 ==========
+// TransitionSeries 中，每个转场使前后场景重叠 T 帧
+// 场景 N 的全局起始帧 = sum(前 N 个场景时长) - N * T
+
+function buildGlobalCaptions(): CaptionSegment[] {
+  const scenes = [
+    { dur: SCENE_DURATIONS.intro, caps: introCaptions },
+    { dur: SCENE_DURATIONS.structure, caps: structureCaptions },
+    { dur: SCENE_DURATIONS.major, caps: majorCaptions },
+    { dur: SCENE_DURATIONS.minor, caps: minorCaptions },
+    { dur: SCENE_DURATIONS.patch, caps: patchCaptions },
+    { dur: SCENE_DURATIONS.preRelease, caps: preReleaseCaptions },
+    { dur: SCENE_DURATIONS.comparison, caps: comparisonCaptions },
+    { dur: SCENE_DURATIONS.realWorld, caps: realWorldCaptions },
+    { dur: SCENE_DURATIONS.outro, caps: outroCaptions },
+  ];
+
+  const result: CaptionSegment[] = [];
+  let globalOffset = 0;
+
+  for (let i = 0; i < scenes.length; i++) {
+    const { dur, caps } = scenes[i];
+    for (const seg of caps) {
+      result.push({
+        text: seg.text,
+        startFrame: globalOffset + seg.startFrame,
+        durationFrames: seg.durationFrames,
+      });
+    }
+    // 下一个场景的起始 = 当前偏移 + 当前时长 - 转场重叠
+    globalOffset += dur - (i < scenes.length - 1 ? T : 0);
+  }
+
+  return result;
+}
+
+const GLOBAL_CAPTIONS = buildGlobalCaptions();
+
+// ========== 主组件 ==========
 export const SemVerVideo: React.FC = () => {
   return (
     <AbsoluteFill>
-    {/* 解说音频 — 将 TTS 生成的音频文件放到 public/SemVer/narration.mp3 即可 */}
-    {/* <Audio src={staticFile("SemVer/narration.mp3")} volume={1} /> */}
+      <TransitionSeries>
+        {/* 通用开场 */}
+        <TransitionSeries.Sequence durationInFrames={SCENE_DURATIONS.intro}>
+          <Intro title="语义化版本号规范" />
+        </TransitionSeries.Sequence>
 
-    <TransitionSeries>
-      {/* 场景 1: 标题页 */}
-      <TransitionSeries.Sequence durationInFrames={SCENE_DURATIONS.title}>
-        <TitleScene />
-      </TransitionSeries.Sequence>
+        <TransitionSeries.Transition
+          presentation={fade()}
+          timing={linearTiming({ durationInFrames: T })}
+        />
 
-      <TransitionSeries.Transition
-        presentation={fade()}
-        timing={linearTiming({ durationInFrames: TRANSITION_DURATION })}
-      />
+        {/* 版本号结构 */}
+        <TransitionSeries.Sequence durationInFrames={SCENE_DURATIONS.structure}>
+          <StructureScene />
+        </TransitionSeries.Sequence>
 
-      {/* 场景 2: 版本号结构 */}
-      <TransitionSeries.Sequence durationInFrames={SCENE_DURATIONS.structure}>
-        <StructureScene />
-      </TransitionSeries.Sequence>
+        <TransitionSeries.Transition
+          presentation={slide({ direction: "from-right" })}
+          timing={linearTiming({ durationInFrames: T })}
+        />
 
-      <TransitionSeries.Transition
-        presentation={slide({ direction: "from-right" })}
-        timing={linearTiming({ durationInFrames: TRANSITION_DURATION })}
-      />
+        {/* MAJOR */}
+        <TransitionSeries.Sequence durationInFrames={SCENE_DURATIONS.major}>
+          <MajorScene />
+        </TransitionSeries.Sequence>
 
-      {/* 场景 3: MAJOR */}
-      <TransitionSeries.Sequence durationInFrames={SCENE_DURATIONS.major}>
-        <MajorScene />
-      </TransitionSeries.Sequence>
+        <TransitionSeries.Transition
+          presentation={slide({ direction: "from-right" })}
+          timing={linearTiming({ durationInFrames: T })}
+        />
 
-      <TransitionSeries.Transition
-        presentation={slide({ direction: "from-right" })}
-        timing={linearTiming({ durationInFrames: TRANSITION_DURATION })}
-      />
+        {/* MINOR */}
+        <TransitionSeries.Sequence durationInFrames={SCENE_DURATIONS.minor}>
+          <MinorScene />
+        </TransitionSeries.Sequence>
 
-      {/* 场景 4: MINOR */}
-      <TransitionSeries.Sequence durationInFrames={SCENE_DURATIONS.minor}>
-        <MinorScene />
-      </TransitionSeries.Sequence>
+        <TransitionSeries.Transition
+          presentation={slide({ direction: "from-right" })}
+          timing={linearTiming({ durationInFrames: T })}
+        />
 
-      <TransitionSeries.Transition
-        presentation={slide({ direction: "from-right" })}
-        timing={linearTiming({ durationInFrames: TRANSITION_DURATION })}
-      />
+        {/* PATCH */}
+        <TransitionSeries.Sequence durationInFrames={SCENE_DURATIONS.patch}>
+          <PatchScene />
+        </TransitionSeries.Sequence>
 
-      {/* 场景 5: PATCH */}
-      <TransitionSeries.Sequence durationInFrames={SCENE_DURATIONS.patch}>
-        <PatchScene />
-      </TransitionSeries.Sequence>
+        <TransitionSeries.Transition
+          presentation={fade()}
+          timing={linearTiming({ durationInFrames: T })}
+        />
 
-      <TransitionSeries.Transition
-        presentation={fade()}
-        timing={linearTiming({ durationInFrames: TRANSITION_DURATION })}
-      />
+        {/* 预发布与构建元数据 */}
+        <TransitionSeries.Sequence durationInFrames={SCENE_DURATIONS.preRelease}>
+          <PreReleaseScene />
+        </TransitionSeries.Sequence>
 
-      {/* 场景 6: 预发布与构建元数据 */}
-      <TransitionSeries.Sequence durationInFrames={SCENE_DURATIONS.preRelease}>
-        <PreReleaseScene />
-      </TransitionSeries.Sequence>
+        <TransitionSeries.Transition
+          presentation={fade()}
+          timing={linearTiming({ durationInFrames: T })}
+        />
 
-      <TransitionSeries.Transition
-        presentation={fade()}
-        timing={linearTiming({ durationInFrames: TRANSITION_DURATION })}
-      />
+        {/* 版本比较 */}
+        <TransitionSeries.Sequence durationInFrames={SCENE_DURATIONS.comparison}>
+          <ComparisonScene />
+        </TransitionSeries.Sequence>
 
-      {/* 场景 7: 版本比较 */}
-      <TransitionSeries.Sequence durationInFrames={SCENE_DURATIONS.comparison}>
-        <ComparisonScene />
-      </TransitionSeries.Sequence>
+        <TransitionSeries.Transition
+          presentation={fade()}
+          timing={linearTiming({ durationInFrames: T })}
+        />
 
-      <TransitionSeries.Transition
-        presentation={fade()}
-        timing={linearTiming({ durationInFrames: TRANSITION_DURATION })}
-      />
+        {/* 实际应用 */}
+        <TransitionSeries.Sequence durationInFrames={SCENE_DURATIONS.realWorld}>
+          <RealWorldScene />
+        </TransitionSeries.Sequence>
 
-      {/* 场景 8: 总结 */}
-      <TransitionSeries.Sequence durationInFrames={SCENE_DURATIONS.summary}>
-        <SummaryScene />
-      </TransitionSeries.Sequence>
-    </TransitionSeries>
+        <TransitionSeries.Transition
+          presentation={fade()}
+          timing={linearTiming({ durationInFrames: T })}
+        />
+
+        {/* 通用结尾 */}
+        <TransitionSeries.Sequence durationInFrames={SCENE_DURATIONS.outro}>
+          <Outro summaryPoints={SUMMARY_POINTS} />
+        </TransitionSeries.Sequence>
+      </TransitionSeries>
+
+      {/* 字幕层 — 叠加在所有场景之上 */}
+      <Captions segments={GLOBAL_CAPTIONS} />
     </AbsoluteFill>
   );
 };
 
-// 计算总帧数: 所有场景帧数之和 - 转场重叠帧数
+// ========== 导出总帧数 ==========
 const allDurations: number[] = [
-  SCENE_DURATIONS.title,
+  SCENE_DURATIONS.intro,
   SCENE_DURATIONS.structure,
   SCENE_DURATIONS.major,
   SCENE_DURATIONS.minor,
   SCENE_DURATIONS.patch,
   SCENE_DURATIONS.preRelease,
   SCENE_DURATIONS.comparison,
-  SCENE_DURATIONS.summary,
+  SCENE_DURATIONS.realWorld,
+  SCENE_DURATIONS.outro,
 ];
 export const TOTAL_DURATION =
   allDurations.reduce((a: number, b: number) => a + b, 0) -
-  7 * TRANSITION_DURATION; // 7 个转场
+  8 * T; // 8 个转场
