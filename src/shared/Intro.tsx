@@ -6,7 +6,10 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
+import { ThreeCanvas } from "@remotion/three";
 import { loadFont } from "@remotion/google-fonts/Inter";
+import React, { useRef, useMemo } from "react";
+import * as THREE from "three";
 
 const { fontFamily } = loadFont("normal", {
   weights: ["400", "700", "900"],
@@ -128,6 +131,65 @@ export const Intro: React.FC<IntroProps> = ({ title }) => {
           }),
         }}
       />
+
+      {/* ---- 3D 背景层 ---- */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          opacity: interpolate(frame, [0, 0.8 * fps], [0, 0.6], {
+            extrapolateRight: "clamp",
+          }),
+        }}
+      >
+        <ThreeCanvas
+          width={width}
+          height={height}
+          camera={{ position: [0, 0, 6], fov: 60 }}
+          style={{ background: "transparent" }}
+        >
+          <ambientLight intensity={0.3} />
+          <directionalLight position={[3, 5, 4]} intensity={0.6} color="#818cf8" />
+          <pointLight position={[-4, -2, 3]} intensity={0.4} color="#f472b6" />
+
+          {/* 中心多面体 — 缓慢旋转 */}
+          <CentralIcosahedron frame={frame} fps={fps} />
+
+          {/* 漂浮小几何体 */}
+          <FloatingGeo
+            position={[-3.2, 1.8, -1]}
+            geometry="octahedron"
+            color="#818cf8"
+            frame={frame}
+            speed={0.7}
+            scale={0.35}
+          />
+          <FloatingGeo
+            position={[3.5, -1.5, -0.5]}
+            geometry="torus"
+            color="#f472b6"
+            frame={frame}
+            speed={-0.5}
+            scale={0.3}
+          />
+          <FloatingGeo
+            position={[-2.5, -2.2, 0.5]}
+            geometry="dodecahedron"
+            color="#a78bfa"
+            frame={frame}
+            speed={0.6}
+            scale={0.25}
+          />
+          <FloatingGeo
+            position={[2.8, 2.3, -1.5]}
+            geometry="tetrahedron"
+            color="#38bdf8"
+            frame={frame}
+            speed={-0.8}
+            scale={0.3}
+          />
+        </ThreeCanvas>
+      </div>
 
       {/* ---- 中心爆发光环 ---- */}
       <div
@@ -425,5 +487,105 @@ const Corner: React.FC<{
         borderRight: isLeft ? "none" : "2px solid rgba(129,140,248,0.25)",
       }}
     />
+  );
+};
+
+// ---- 3D 中心多面体 ----
+
+const CentralIcosahedron: React.FC<{ frame: number; fps: number }> = ({
+  frame,
+  fps,
+}) => {
+  const meshRef = useRef<THREE.Mesh>(null);
+
+  // 入场缩放
+  const entryProgress = Math.min(frame / (fps * 1.2), 1);
+  const easedScale = 1 - Math.pow(1 - entryProgress, 3); // easeOutCubic
+
+  const rotX = frame * 0.008;
+  const rotY = frame * 0.012;
+  const rotZ = frame * 0.005;
+
+  const material = useMemo(
+    () =>
+      new THREE.MeshPhysicalMaterial({
+        color: new THREE.Color("#6366f1"),
+        metalness: 0.3,
+        roughness: 0.15,
+        transparent: true,
+        opacity: 0.35,
+        wireframe: false,
+        side: THREE.DoubleSide,
+        transmission: 0.6,
+        thickness: 1.5,
+        ior: 1.5,
+      }),
+    [],
+  );
+
+  return (
+    <mesh
+      ref={meshRef}
+      rotation={[rotX, rotY, rotZ]}
+      scale={easedScale * 1.8}
+      material={material}
+    >
+      <icosahedronGeometry args={[1, 1]} />
+    </mesh>
+  );
+};
+
+// ---- 3D 漂浮小几何体 ----
+
+const FloatingGeo: React.FC<{
+  position: [number, number, number];
+  geometry: "octahedron" | "torus" | "dodecahedron" | "tetrahedron";
+  color: string;
+  frame: number;
+  speed: number;
+  scale: number;
+}> = ({ position, geometry, color, frame, speed, scale }) => {
+  const floatY = Math.sin(frame * 0.04 + position[0]) * 0.3;
+  const rotY = frame * 0.02 * speed;
+  const rotX = frame * 0.015 * speed;
+
+  const entryProgress = Math.min(frame / 30, 1);
+  const easedScale = (1 - Math.pow(1 - entryProgress, 3)) * scale;
+
+  const material = useMemo(
+    () =>
+      new THREE.MeshStandardMaterial({
+        color: new THREE.Color(color),
+        metalness: 0.6,
+        roughness: 0.2,
+        transparent: true,
+        opacity: 0.5,
+        wireframe: true,
+      }),
+    [color],
+  );
+
+  const geoElement = (() => {
+    switch (geometry) {
+      case "octahedron":
+        return <octahedronGeometry args={[1, 0]} />;
+      case "torus":
+        return <torusGeometry args={[1, 0.35, 12, 24]} />;
+      case "dodecahedron":
+        return <dodecahedronGeometry args={[1, 0]} />;
+      case "tetrahedron":
+        return <tetrahedronGeometry args={[1, 0]} />;
+    }
+  })();
+
+  return (
+    <mesh
+      position={[position[0], position[1] + floatY, position[2]]}
+      rotation={[rotX, rotY, 0]}
+      scale={easedScale}
+      material={material}
+    >
+      {geoElement}
+    </mesh>
   );
 };

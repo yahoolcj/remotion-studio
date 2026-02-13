@@ -5,7 +5,10 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
+import { ThreeCanvas } from "@remotion/three";
 import { loadFont } from "@remotion/google-fonts/Inter";
+import React, { useMemo } from "react";
+import * as THREE from "three";
 
 const { fontFamily } = loadFont("normal", {
   weights: ["400", "700", "900"],
@@ -25,7 +28,7 @@ export type OutroProps = {
  */
 export const Outro: React.FC<OutroProps> = ({ summaryPoints }) => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
+  const { fps, width, height } = useVideoConfig();
 
   const hasSummary = summaryPoints && summaryPoints.length > 0;
 
@@ -102,6 +105,37 @@ export const Outro: React.FC<OutroProps> = ({ summaryPoints }) => {
             "radial-gradient(circle, rgba(236,72,153,0.08) 0%, transparent 70%)",
         }}
       />
+
+      {/* 3D 背景层 */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          opacity: interpolate(frame, [0, 0.6 * fps], [0, 0.45], {
+            extrapolateRight: "clamp",
+          }),
+        }}
+      >
+        <ThreeCanvas
+          width={width}
+          height={height}
+          camera={{ position: [0, 0, 7], fov: 50 }}
+          style={{ background: "transparent" }}
+        >
+          <ambientLight intensity={0.25} />
+          <directionalLight position={[4, 3, 5]} intensity={0.5} color="#818cf8" />
+          <pointLight position={[-3, -2, 4]} intensity={0.35} color="#ec4899" />
+
+          {/* 缓慢旋转的环面结 */}
+          <OutroTorusKnot frame={frame} fps={fps} />
+
+          {/* 漂浮球体 */}
+          <OutroSphere position={[-3, 2, -1]} color="#818cf8" frame={frame} offset={0} />
+          <OutroSphere position={[3.5, -1.8, -0.8]} color="#f472b6" frame={frame} offset={2} />
+          <OutroSphere position={[-2.5, -2.5, 0.5]} color="#a78bfa" frame={frame} offset={4} />
+          <OutroSphere position={[2, 2.8, -1.2]} color="#38bdf8" frame={frame} offset={6} />
+        </ThreeCanvas>
+      </div>
 
       {/* 可选：总结要点 */}
       {hasSummary && (
@@ -235,5 +269,80 @@ export const Outro: React.FC<OutroProps> = ({ summaryPoints }) => {
         花蛤豆腐汤
       </div>
     </AbsoluteFill>
+  );
+};
+
+// ---- 3D 环面结 ----
+
+const OutroTorusKnot: React.FC<{ frame: number; fps: number }> = ({
+  frame,
+  fps,
+}) => {
+  const entryProgress = Math.min(frame / (fps * 1.5), 1);
+  const easedScale = 1 - Math.pow(1 - entryProgress, 3);
+
+  const rotX = frame * 0.006;
+  const rotY = frame * 0.01;
+
+  const material = useMemo(
+    () =>
+      new THREE.MeshPhysicalMaterial({
+        color: new THREE.Color("#7c3aed"),
+        metalness: 0.4,
+        roughness: 0.1,
+        transparent: true,
+        opacity: 0.3,
+        side: THREE.DoubleSide,
+        transmission: 0.5,
+        thickness: 1,
+        ior: 1.4,
+        wireframe: false,
+      }),
+    [],
+  );
+
+  return (
+    <mesh rotation={[rotX, rotY, 0]} scale={easedScale * 1.2} material={material}>
+      <torusKnotGeometry args={[1, 0.35, 128, 16, 2, 3]} />
+    </mesh>
+  );
+};
+
+// ---- 3D 漂浮球体 ----
+
+const OutroSphere: React.FC<{
+  position: [number, number, number];
+  color: string;
+  frame: number;
+  offset: number;
+}> = ({ position, color, frame, offset }) => {
+  const floatY = Math.sin(frame * 0.035 + offset) * 0.4;
+  const rotY = frame * 0.015;
+
+  const entryProgress = Math.min(frame / 25, 1);
+  const easedScale = (1 - Math.pow(1 - entryProgress, 3)) * 0.2;
+
+  const material = useMemo(
+    () =>
+      new THREE.MeshStandardMaterial({
+        color: new THREE.Color(color),
+        metalness: 0.7,
+        roughness: 0.15,
+        transparent: true,
+        opacity: 0.5,
+        wireframe: true,
+      }),
+    [color],
+  );
+
+  return (
+    <mesh
+      position={[position[0], position[1] + floatY, position[2]]}
+      rotation={[0, rotY, 0]}
+      scale={easedScale}
+      material={material}
+    >
+      <sphereGeometry args={[1, 16, 16]} />
+    </mesh>
   );
 };
