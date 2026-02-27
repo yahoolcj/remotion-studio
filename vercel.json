@@ -1,5 +1,3 @@
 {
-  "buildCommand": "node scripts/build-site.mjs",
-  "outputDirectory": "dist",
-  "installCommand": "pnpm install && pnpm rebuild esbuild"
+  "outputDirectory": "public"
 }
