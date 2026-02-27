@@ -47,6 +47,7 @@
     "render:httpcache": "remotion render HttpCache public/videos/HttpCache.mp4",
     "render:cosmic": "remotion render CosmicEvolution public/videos/CosmicEvolution.mp4",
     "render:all": "pnpm render:semver && pnpm render:fnm && pnpm render:httpcache",
+    "build:studio": "remotion bundle && mkdir -p public/studio && cp -r build/* public/studio/",
     "upgrade": "remotion upgrade",
     "lint": "eslint src && tsc"
   },

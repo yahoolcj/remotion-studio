@@ -1,3 +1,5 @@
 {
-  "outputDirectory": "public"
+  "buildCommand": "pnpm build:studio",
+  "outputDirectory": "public",
+  "installCommand": "pnpm install && pnpm rebuild esbuild"
 }
