@@ -1,7 +1,13 @@
 node_modules
 dist
+build
 .DS_Store
 .env
 
 # Ignore the output video from Git but not videos you import into src/.
 out
+
+# Studio bundle is generated at build time, not committed
+public/studio
+
+# public/videos/ is tracked — rendered videos are committed for Vercel deployment
