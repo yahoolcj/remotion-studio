@@ -9,6 +9,10 @@ import {
   CosmicEvolutionVideo,
   TOTAL_DURATION as COSMIC_TOTAL_DURATION,
 } from "./CosmicEvolution";
+import {
+  HttpCacheVideo,
+  TOTAL_DURATION as HTTP_CACHE_TOTAL_DURATION,
+} from "./HttpCache";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -33,6 +37,14 @@ export const RemotionRoot: React.FC = () => {
         id="CosmicEvolution"
         component={CosmicEvolutionVideo}
         durationInFrames={COSMIC_TOTAL_DURATION}
+        fps={30}
+        width={1280}
+        height={720}
+      />
+      <Composition
+        id="HttpCache"
+        component={HttpCacheVideo}
+        durationInFrames={HTTP_CACHE_TOTAL_DURATION}
         fps={30}
         width={1280}
         height={720}
