@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>花蛤豆腐汤 — 技术视频合集</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans SC', sans-serif;
+      background: linear-gradient(145deg, #070515 0%, #1a1145 40%, #0d0b2e 70%, #12061f 100%);
+      color: #e2e8f0;
+      min-height: 100vh;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 60px 24px 40px;
+    }
+
+    .hero-author {
+      font-size: 18px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 6px;
+      margin-bottom: 8px;
+    }
+
+    .hero-title {
+      font-size: 42px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #818cf8, #c084fc, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+    }
+
+    .hero-subtitle {
+      font-size: 16px;
+      color: rgba(255,255,255,0.35);
+      max-width: 500px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .divider {
+      width: 180px;
+      height: 3px;
+      background: linear-gradient(90deg, #818cf8, #c084fc, #f472b6);
+      border-radius: 2px;
+      margin: 24px auto 0;
+    }
+
+    .grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(520px, 1fr));
+      gap: 28px;
+    }
+
+    @media (max-width: 580px) {
+      .grid { grid-template-columns: 1fr; }
+      .hero-title { font-size: 28px; }
+    }
+
+    .card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(129,140,248,0.2);
+    }
+
+    .card video {
+      width: 100%;
+      display: block;
+      background: #000;
+      aspect-ratio: 16/9;
+    }
+
+    .card-body {
+      padding: 20px 24px;
+    }
+
+    .card-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 3px 10px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    .card-title {
+      font-size: 22px;
+      font-weight: 900;
+      color: white;
+      margin-bottom: 6px;
+    }
+
+    .card-desc {
+      font-size: 14px;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.3);
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.15s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: white;
+      box-shadow: 0 4px 16px rgba(99,102,241,0.3);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 6px 24px rgba(99,102,241,0.4);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.6);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .btn-outline:hover {
+      background: rgba(255,255,255,0.08);
+      color: white;
+    }
+
+    .no-video {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: rgba(255,255,255,0.2);
+      font-size: 14px;
+    }
+
+    .no-video-icon { font-size: 36px; opacity: 0.4; }
+
+    .footer {
+      text-align: center;
+      padding: 24px;
+      color: rgba(255,255,255,0.15);
+      font-size: 13px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .render-tip {
+      max-width: 700px;
+      margin: 0 auto 32px;
+      padding: 16px 24px;
+      background: rgba(251,191,36,0.05);
+      border: 1px solid rgba(251,191,36,0.15);
+      border-radius: 14px;
+      text-align: center;
+    }
+
+    .render-tip-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fbbf24;
+      margin-bottom: 4px;
+    }
+
+    .render-tip code {
+      background: rgba(0,0,0,0.3);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 13px;
+      color: #86efac;
+    }
+
+    .render-tip-text {
+      font-size: 13px;
+      color: rgba(255,255,255,0.35);
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="hero-author">花蛤豆腐汤</div>
+    <h1 class="hero-title">技术视频合集</h1>
+    <p class="hero-subtitle">用 Remotion 制作的开发者教学视频系列，涵盖版本管理、工具使用、Web 基础知识等主题</p>
+    <div class="divider"></div>
+  </div>
+
+  <div class="render-tip">
+    <div class="render-tip-title">💡 如何生成视频文件</div>
+    <div class="render-tip-text">
+      克隆仓库后运行 <code>pnpm render:all</code> 生成所有视频，
+      或 <code>pnpm render:httpcache</code> 生成单个视频
+    </div>
+  </div>
+
+  <div class="grid" id="gallery"></div>
+
+  <div class="footer">
+    Built with Remotion — 用 React 制作视频
+  </div>
+
+  <script>
+    const VIDEOS = [
+      {
+        id: 'SemVer',
+        title: '语义化版本号规范',
+        desc: '深入讲解 MAJOR.MINOR.PATCH 版本号规范，包括预发布标识、构建元数据和版本比较规则',
+        tag: '规范',
+        tagColor: '#6366f1',
+        duration: '1:27',
+        scenes: 9,
+        file: 'videos/SemVer.mp4',
+      },
+      {
+        id: 'FnmGuide',
+        title: '如何同时使用不同 Node 版本？',
+        desc: 'fnm 工具教程：从安装配置到项目级自动切换，告别 nvm 全局切换的困境',
+        tag: '工具',
+        tagColor: '#a855f7',
+        duration: '1:14',
+        scenes: 9,
+        file: 'videos/FnmGuide.mp4',
+      },
+      {
+        id: 'HttpCache',
+        title: '一文搞懂 HTTP 缓存',
+        desc: '从 Cache-Control 到 ETag，完整的缓存决策流程图和实战最佳实践',
+        tag: '网络',
+        tagColor: '#06b6d4',
+        duration: '1:28',
+        scenes: 10,
+        file: 'videos/HttpCache.mp4',
+      },
+      {
+        id: 'CosmicEvolution',
+        title: '从奇点到星辰：宇宙 138 亿年演化史',
+        desc: '3D 可视化宇宙大爆炸、暗物质时代、星系形成到太阳系诞生的全过程',
+        tag: '科普',
+        tagColor: '#f472b6',
+        duration: '1:51',
+        scenes: 12,
+        file: 'videos/CosmicEvolution.mp4',
+      },
+    ];
+
+    const gallery = document.getElementById('gallery');
+
+    VIDEOS.forEach(v => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <div class="video-container" data-file="${v.file}" data-id="${v.id}">
+          <div class="no-video">
+            <div class="no-video-icon">🎬</div>
+            <div>加载中...</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <span class="card-tag" style="background:${v.tagColor}18;color:${v.tagColor};border:1px solid ${v.tagColor}33">${v.tag}</span>
+          <div class="card-title">${v.title}</div>
+          <div class="card-desc">${v.desc}</div>
+          <div class="card-meta">
+            <span>⏱ ${v.duration}</span>
+            <span>🎞 ${v.scenes} 个场景</span>
+            <span>📐 1280×720 · 30fps</span>
+          </div>
+          <div class="card-actions">
+            <a class="btn btn-primary download-btn" data-file="${v.file}" data-id="${v.id}" href="${v.file}" download>
+              ⬇ 下载 MP4
+            </a>
+          </div>
+        </div>
+      `;
+      gallery.appendChild(card);
+    });
+
+    document.querySelectorAll('.video-container').forEach(container => {
+      const file = container.dataset.file;
+      const video = document.createElement('video');
+      video.controls = true;
+      video.preload = 'metadata';
+      video.src = file;
+      video.addEventListener('loadedmetadata', () => {
+        container.innerHTML = '';
+        container.appendChild(video);
+      });
+      video.addEventListener('error', () => {
+        container.querySelector('.no-video').innerHTML = `
+          <div class="no-video-icon">📭</div>
+          <div>视频尚未生成</div>
+          <div style="font-size:12px;margin-top:4px">运行 <code style="background:rgba(0,0,0,0.3);padding:1px 6px;border-radius:4px;color:#86efac">pnpm render:all</code> 生成</div>
+        `;
+      });
+    });
+
+    document.querySelectorAll('.download-btn').forEach(btn => {
+      const file = btn.dataset.file;
+      fetch(file, { method: 'HEAD' }).then(r => {
+        if (!r.ok) {
+          btn.classList.remove('btn-primary');
+          btn.classList.add('btn-outline');
+          btn.innerHTML = '📭 尚未生成';
+          btn.removeAttribute('href');
+          btn.removeAttribute('download');
+          btn.style.cursor = 'default';
+        }
+      }).catch(() => {
+        btn.classList.remove('btn-primary');
+        btn.classList.add('btn-outline');
+        btn.innerHTML = '📭 尚未生成';
+        btn.removeAttribute('href');
+        btn.removeAttribute('download');
+        btn.style.cursor = 'default';
+      });
+    });
+  </script>
+</body>
+</html>

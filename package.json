@@ -42,6 +42,12 @@
   "scripts": {
     "dev": "remotion studio",
     "build": "remotion bundle",
+    "render:semver": "remotion render SemVer out/videos/SemVer.mp4",
+    "render:fnm": "remotion render FnmGuide out/videos/FnmGuide.mp4",
+    "render:httpcache": "remotion render HttpCache out/videos/HttpCache.mp4",
+    "render:cosmic": "remotion render CosmicEvolution out/videos/CosmicEvolution.mp4",
+    "render:all": "pnpm render:semver && pnpm render:fnm && pnpm render:httpcache",
+    "build:site": "node scripts/build-site.mjs",
     "upgrade": "remotion upgrade",
     "lint": "eslint src && tsc"
   },
