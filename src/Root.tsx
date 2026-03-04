@@ -13,6 +13,10 @@ import {
   HttpCacheVideo,
   TOTAL_DURATION as HTTP_CACHE_TOTAL_DURATION,
 } from "./HttpCache";
+import {
+  SkillGuideVideo,
+  TOTAL_DURATION as SKILL_GUIDE_TOTAL_DURATION,
+} from "./SkillGuide";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -45,6 +49,14 @@ export const RemotionRoot: React.FC = () => {
         id="HttpCache"
         component={HttpCacheVideo}
         durationInFrames={HTTP_CACHE_TOTAL_DURATION}
+        fps={30}
+        width={1280}
+        height={720}
+      />
+      <Composition
+        id="SkillGuide"
+        component={SkillGuideVideo}
+        durationInFrames={SKILL_GUIDE_TOTAL_DURATION}
         fps={30}
         width={1280}
         height={720}

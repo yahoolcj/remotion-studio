@@ -5,7 +5,6 @@ build
 .env
 
 # Ignore the output video from Git but not videos you import into src/.
-out
 
 # Studio bundle is generated at build time, not committed
 public/studio

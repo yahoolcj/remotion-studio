@@ -42,11 +42,13 @@
   "scripts": {
     "dev": "remotion studio",
     "build": "remotion bundle",
+    "render": "node scripts/render.mjs",
     "render:semver": "remotion render SemVer public/videos/SemVer.mp4",
     "render:fnm": "remotion render FnmGuide public/videos/FnmGuide.mp4",
     "render:httpcache": "remotion render HttpCache public/videos/HttpCache.mp4",
     "render:cosmic": "remotion render CosmicEvolution public/videos/CosmicEvolution.mp4",
-    "render:all": "pnpm render:semver && pnpm render:fnm && pnpm render:httpcache",
+    "render:skillguide": "remotion render SkillGuide public/videos/SkillGuide.mp4",
+    "render:all": "pnpm render:semver && pnpm render:fnm && pnpm render:httpcache && pnpm render:cosmic && pnpm render:skillguide",
     "build:studio": "remotion bundle && mkdir -p public/studio && cp -r build/* public/studio/",
     "upgrade": "remotion upgrade",
     "lint": "eslint src && tsc"
